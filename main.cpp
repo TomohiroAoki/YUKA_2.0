@@ -4,11 +4,11 @@
 #include "hcsr04.h"
 #include "EPOS_CAN.h"
 
-#define DELTA_T1  0.1
-#define target_val1  0
-#define Kp1  3
-#define Ki1  0
-#define Kd1  0
+#define DELTA_T1 0.1
+#define target_val1 0
+#define Kp1 3
+#define Ki1 0
+#define Kd1 0
 
 #define RPM_RIDE 400
 #define RPM_CLEAN 200
@@ -43,17 +43,17 @@ char Serialdata;
 
 int encX = 0;
 int encY = 0;
-int posX =0;
-int posY =0;
+int posX = 0;
+int posY = 0;
 
 HCSR04 u1(PA_0, PA_1),u2(PA_5, PA_6),u3(PB_0, PA_10);
 
 BusOut LED(PA_4,PB_6,PB_7,PA_9);
-DigitalOut LED1(PA_4),LED2(PB_6),LED3(PB_7),LED4(PA_9);
+//DigitalOut LEDa(PA_4),LEDb(PB_6),LEDc(PB_7),LEDd(PA_9);
 
 Serial pc(USBTX, USBRX, 115200);
 DigitalIn select(PF_1);
- 
+
 //Nucleo f303k8用
 USB Usb(D11, D12, D13, A3, A2); // mosi, miso, sclk, ssel, intr
 BTD Btd(&Usb);
@@ -61,14 +61,16 @@ PS3BT PS3(&Btd);
 
 //CAN canPort(PA_11, PA_12);  //CAN name(PinName rd, PinName td) F303k8
 
+/*
 void LED(int led){
     if(led == 0){
-        LED1 = 1;
-        LED2 = 1;
-        LED3 = 1;
-        LED4 = 1;
+        LEDa = 1;
+        LEDb = 1;
+        LEDc = 1;
+        LEDd = 1;
     } 
 }
+*/
 
 //unsigned int get_cm_n(HCSR04, unsigned int);
 //USE -> unsigned int dist_UnitA = get_cm_n(u2, 5);
@@ -328,6 +330,9 @@ int main(){
     pc.attach(SerialRX);
     //pc.baud(115200);
     select.mode(PullUp);
+
+    //LED.mode(PullUp);
+
     //CAN
     canPort.frequency(1000000); //Bit Rate:1MHz
     canPort.attach(CANdataRX,CAN::RxIrq);
@@ -344,7 +349,7 @@ int main(){
     int dist1,dist2,dist3,dist4;
 
     printf("\nstart\r\n");
-    LED = 0b1111;
+    //LED = 0b1111;
 
     while (1){
         pc.printf("%d\n\r",select.read());
@@ -579,7 +584,8 @@ int main(){
             }
             //pc1.printf("\r\nPS3 USB Library Started");
 
-            LED = 0b1111;
+            //LED = 0b1111;
+            //LED(0);
 
             while(select != 0){ //manual loop
             
@@ -651,6 +657,7 @@ int main(){
                     
                 }else{
                     LED = 0b1111;
+                    //LED(0);
                     vel_stop();
                 }
             }

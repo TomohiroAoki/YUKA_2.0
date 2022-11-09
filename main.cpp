@@ -1,6 +1,5 @@
 #include "mbed.h"
 #include "PS3BT.h"
-#include <usbhub.h>
 #include "hcsr04.h"
 #include "EPOS_CAN.h"
 
@@ -583,9 +582,6 @@ int main(){
                 while (1); // Halt
             }
             //pc1.printf("\r\nPS3 USB Library Started");
-
-            //LED = 0b1111;
-            //LED(0);
 
             while(select != 0){ //manual loop
             
